@@ -1,0 +1,41 @@
+/* ═══════════════════ CSS Variables (Consolidated) ═══════════════════ */
+:root {
+  --primary: #6c5ce7;
+  --secondary: #a29bfe;
+  --accent: #fd79a8;
+  --gold: #ffeaa7;
+  --health: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 50%, #d63031 100%);
+  --mana: linear-gradient(135deg, #74b9ff 0%, #0984e3 50%, #6c5ce7 100%);
+  --glass: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-bg: var(--glass);
+  --glass-bd: var(--glass-border);
+  --glass-blur: 10px;
+  --glow-shadow: var(--glow);
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --glow: 0 0 20px rgba(108, 92, 231, 0.5);
+  --hud-bg: rgba(15, 18, 40, 0.62);
+  --hud-border: rgba(255, 255, 255, 0.18);
+  --hud-blur: 12px;
+  --hud-radius: 14px;
+  --hud-shadow:
+                0 12px 35px rgba(0, 0, 0, 0.45),
+                0 0 0 1px rgba(255, 255, 255, 0.06) inset,
+                0 0 18px rgba(108, 92, 231, 0.25);
+  --gold-grad: linear-gradient(135deg, var(--gold) 0%, var(--accent) 50%, var(--secondary) 100%);
+  --weather-hue: 0deg;
+  --weather-sat: 1;
+  --weather-bright: 1;
+  --weather-contrast: 1;
+  --tu-glass-bg: rgba(15, 18, 40, 0.62);
+  --tu-glass-bg-strong: rgba(12, 14, 32, 0.82);
+  --tu-glass-border: rgba(255, 255, 255, 0.18);
+  --tu-glass-border-soft: rgba(255, 255, 255, 0.12);
+  --tu-glass-shadow: 0 18px 50px rgba(0, 0, 0, 0.55);
+  --tu-glass-blur: 14px;
+  --tu-glass-radius: 18px;
+  --tu-text: rgba(255, 255, 255, 0.92);
+  --tu-muted: rgba(255, 255, 255, 0.68);
+  --tu-accent: rgba(108, 92, 231, 0.75);
+  --tu-accent2: rgba(253, 121, 168, 0.55);
+}

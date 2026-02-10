@@ -1,0 +1,2046 @@
+/* ═══════════════════ Terraria Ultra - Main Stylesheet ═══════════════════ */
+/* Consolidated from 5 inline <style> blocks */
+
+/* Reset */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+button { font: inherit; padding: 0; }
+
+html, body {
+  width: 100%; height: 100%; overflow: hidden;
+  background: linear-gradient(135deg, #0c0c1e 0%, #1a1a2e 50%, #16213e 100%);
+  font-family: system-ui, sans-serif;
+  user-select: none; -webkit-user-select: none;
+  touch-action: none; -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+    <style>
+        
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        button {
+            font: inherit;
+            padding: 0;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: linear-gradient(135deg, #0c0c1e 0%, #1a1a2e 50%, #16213e 100%);
+            font-family: system-ui, system-ui, sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: none;
+            -webkit-touch-callout: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        #game {
+            display: block;
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* ═══════════════════ 玻璃态UI层 ═══════════════════ */
+        #ui {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        /* ═══════════════════ 状态栏 - 现代玻璃态 ═══════════════════ */
+        #stats {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transform-origin: top left;
+        }
+
+        .stat-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(var(--hud-blur));
+            -webkit-backdrop-filter: blur(var(--hud-blur));
+            background: var(--hud-bg);
+            border: 1px solid var(--hud-border);
+            border-radius: var(--hud-radius);
+            padding: 6px 12px 6px 8px;
+            box-shadow: var(--hud-shadow);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .stat-bar:hover {
+            transform: scale(1.05);
+        }
+
+        .stat-bar .icon {
+            font-size: 20px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        .stat-bar .bar {
+            width: 130px;
+            height: 18px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-bar .fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-bar .fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            100% {
+                left: 100%;
+            }
+        }
+
+        #health-fill {
+            background: var(--health);
+        }
+
+        #mana-fill {
+            background: var(--mana);
+        }
+
+        .stat-bar .value {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 10px;
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        /* ═══════════════════ 快捷栏 - 豪华版 ═══════════════════ */
+        #hotbar {
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 6px;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            background: linear-gradient(135deg, rgba(30, 30, 60, 0.9), rgba(20, 20, 40, 0.95));
+            padding: 10px 14px;
+            border-radius: 20px;
+            border: 2px solid rgba(108, 92, 231, 0.3);
+            box-shadow: var(--shadow), var(--glow), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            pointer-events: auto;
+        }
+
+        .slot {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(145deg, rgba(50, 50, 80, 0.8), rgba(30, 30, 50, 0.9));
+            border: 2px solid rgba(100, 100, 150, 0.4);
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            overflow: hidden;
+        }
+
+        .slot::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            border-radius: 10px;
+            pointer-events: none;
+        }
+
+        .slot:hover {
+            transform: translateY(-3px);
+            border-color: rgba(162, 155, 254, 0.6);
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.3);
+        }
+
+        .slot.active {
+            border-color: var(--gold);
+            box-shadow: 0 0 25px rgba(255, 234, 167, 0.6), 0 0 50px rgba(255, 234, 167, 0.3);
+            transform: translateY(-5px) scale(1.08);
+            background: linear-gradient(145deg, rgba(70, 60, 100, 0.9), rgba(50, 40, 70, 0.95));
+        }
+
+        .slot.active::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(45deg, var(--gold), var(--accent), var(--gold));
+            border-radius: 14px;
+            z-index: -1;
+            animation: borderGlow 2s linear infinite;
+        }
+
+        @keyframes borderGlow {
+
+            0%,
+            100% {
+                opacity: 0.8;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .slot canvas {
+            width: 32px;
+            height: 32px;
+            image-rendering: pixelated;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+        }
+
+        .slot .item-icon {
+            font-size: 26px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+        }
+
+        .slot .count {
+            position: absolute;
+            bottom: 2px;
+            right: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--gold);
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8), 0 0 10px rgba(255, 234, 167, 0.5);
+        }
+
+        .slot .key {
+            position: absolute;
+            top: 2px;
+            left: 4px;
+            font-size: 9px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.5);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .slot.empty {
+            opacity: 0.4;
+            background: linear-gradient(145deg, rgba(30, 30, 50, 0.6), rgba(20, 20, 30, 0.7));
+        }
+
+        .slot.empty:hover {
+            opacity: 0.6;
+        }
+
+        /* ═══════════════════ 小地图 - 全息风格 ═══════════════════ */
+        #minimap {
+            position: absolute;
+            contain: layout paint;
+            /* transform 动画更 GPU 友好（展开/收起不再触发布局） */
+            --mm-sx: 1;
+            --mm-sy: 1;
+            will-change: transform;
+            right: 15px;
+            bottom: 15px;
+            top: auto;
+            width: 160px;
+            height: 100px;
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            background: linear-gradient(135deg, rgba(20, 20, 40, 0.85), rgba(10, 10, 30, 0.9));
+            border: 2px solid rgba(108, 92, 231, 0.4);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow), 0 0 30px rgba(108, 92, 231, 0.2);
+            cursor: pointer;
+            user-select: none;
+            pointer-events: auto;
+            transition: transform 220ms cubic-bezier(0.2, 0.9, 0.2, 1), border-radius 220ms cubic-bezier(0.2, 0.9, 0.2, 1);
+            transform-origin: bottom right;
+            transform: translateZ(0) scale(var(--mm-sx), var(--mm-sy));
+        }
+
+        #minimap::before {
+            content: '🗺️ MAP (点击展开)';
+            position: absolute;
+            top: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 8px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.55);
+            letter-spacing: 2px;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        #minimap canvas {
+            width: 100%;
+            height: 100%;
+            image-rendering: pixelated;
+            opacity: 0.9;
+        }
+
+        #minimap::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            /* 原文件这里的渐变写法有截断字符，保留原思路并修正为可用值 */
+            background: linear-gradient(180deg, rgba(108, 92, 231, 0.15) 0%, transparent 30%, transparent 70%, rgba(108, 92, 231, 0.10) 100%);
+            pointer-events: none;
+            border-radius: 14px;
+        }
+
+        
+        #minimap.minimap-collapsed {
+            border-radius: 14px;
+        }
+
+        #minimap.minimap-collapsed::before {
+            content: '🗺️';
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 18px;
+            letter-spacing: 0;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        #minimap.minimap-collapsed canvas {
+            opacity: 0;
+        }
+
+        #minimap.minimap-expanded {}
+
+        #minimap.minimap-expanded::before {
+            content: '🗺️ MAP (点击收起)';
+        }
+
+        /* ═══════════════════ 挖掘进度条 (新版 HUD) ═══════════════════ */
+        #mining-bar {
+            --mb-accent: #ffeaa7;
+            position: fixed;
+            left: 0;
+            top: 0;
+            transform: translate(-50%, -100%) scale(0.98);
+            min-width: 180px;
+            max-width: min(240px, 78vw);
+            padding: 10px 12px 10px 10px;
+            border-radius: var(--hud-radius);
+            background: var(--hud-bg);
+            border: 1px solid var(--hud-border);
+            box-shadow: var(--hud-shadow);
+            backdrop-filter: blur(var(--hud-blur));
+            -webkit-backdrop-filter: blur(var(--hud-blur));
+            pointer-events: none;
+            z-index: 9999;
+            display: none;
+            opacity: 0;
+            will-change: transform, opacity, left, top;
+            transition: opacity 140ms ease, transform 140ms ease;
+        }
+
+        #mining-bar.show {
+            opacity: 1;
+            transform: translate(-50%, -100%) scale(1);
+        }
+
+        #mining-bar::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: inherit;
+            pointer-events: none;
+            box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+        }
+
+        #mining-bar .mb-top {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        #mining-bar .mb-icon {
+            width: 18px;
+            height: 18px;
+            flex: 0 0 18px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+            image-rendering: pixelated;
+        }
+
+        #mining-bar .mb-name {
+            flex: 1 1 auto;
+            min-width: 0;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+            color: rgba(255, 255, 255, 0.92);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        #mining-bar .mb-percent {
+            flex: 0 0 auto;
+            font-size: 12px;
+            font-variant-numeric: tabular-nums;
+            color: rgba(255, 255, 255, 0.72);
+        }
+
+        #mining-bar .mb-track {
+            position: relative;
+            height: 9px;
+            border-radius: 999px;
+            background: rgba(0, 0, 0, 0.35);
+            overflow: hidden;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.45);
+        }
+
+        #mining-bar .fill {
+            position: relative;
+            height: 100%;
+            width: 0%;
+            border-radius: 999px;
+            background: linear-gradient(90deg,
+                    var(--mb-accent) 0%,
+                    rgba(255, 255, 255, 0.35) 28%,
+                    #fd79a8 58%,
+                    #6c5ce7 100%);
+            background-size: 200% 100%;
+            animation: miningGradient 0.9s linear infinite;
+            transition: width 50ms linear;
+            box-shadow: 0 0 14px rgba(253, 121, 168, 0.25);
+        }
+
+        #mining-bar .fill::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.28) 50%, rgba(255, 255, 255, 0) 100%);
+            transform: translateX(-120%);
+            animation: miningShine 1.15s ease-in-out infinite;
+            opacity: 0.65;
+        }
+
+        @keyframes miningGradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            100% {
+                background-position: 200% 50%;
+            }
+        }
+
+        @keyframes miningShine {
+            0% {
+                transform: translateX(-120%);
+            }
+
+            65% {
+                transform: translateX(120%);
+            }
+
+            100% {
+                transform: translateX(120%);
+            }
+        }
+
+        html.is-mobile #mining-bar {
+            min-width: 160px;
+            padding: 9px 11px 9px 9px;
+            border-radius: 13px;
+        }
+
+        /* ═══════════════════ 加载界面 - 史诗级 */
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0c0c1e 0%, #1a1a2e 50%, #16213e 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        #loading::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 30%, rgba(108, 92, 231, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 70%, rgba(253, 121, 168, 0.1) 0%, transparent 50%);
+            animation: bgFloat 20s ease-in-out infinite;
+        }
+
+        @keyframes bgFloat {
+
+            0%,
+            100% {
+                transform: translate(-10%, -10%) rotate(0deg);
+            }
+
+            50% {
+                transform: translate(10%, 10%) rotate(180deg);
+            }
+        }
+
+        .loading-content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #loading h1 {
+            font-family: system-ui, cursive;
+            color: transparent;
+            font-size: clamp(32px, 8vw, 64px);
+            background: var(--gold-grad);
+            -webkit-background-clip: text;
+            background-clip: text;
+            text-shadow: 0 0 60px rgba(255, 234, 167, 0.5);
+            margin-bottom: 10px;
+            animation: titleFloat 3s ease-in-out infinite;
+            letter-spacing: 2px;
+        }
+
+        @keyframes titleFloat {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        #loading .subtitle {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            margin-bottom: 40px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        #loading .progress {
+            width: min(400px, 85vw);
+            height: 12px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid rgba(108, 92, 231, 0.3);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3), var(--glow);
+            position: relative;
+        }
+
+        #loading .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent), var(--gold));
+            background-size: 200% 100%;
+            animation: progressGlow 2s linear infinite;
+            width: 0%;
+            transition: width 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border-radius: 20px;
+            position: relative;
+        }
+
+        #loading .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 20px;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6));
+            border-radius: 0 20px 20px 0;
+        }
+
+        @keyframes progressGlow {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            100% {
+                background-position: 200% 50%;
+            }
+        }
+
+        #loading .status {
+            color: var(--secondary);
+            margin-top: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .loading-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--gold);
+            border-radius: 50%;
+            animation: particleFloat 10s linear infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.6;
+            }
+
+            90% {
+                opacity: 0.6;
+            }
+
+            100% {
+                transform: translateY(-100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* ═══════════════════ 移动端虚拟摇杆 - 全息风格 ═══════════════════ */
+        #mobile-controls {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 150;
+        }
+
+        .joystick-container {
+            position: absolute;
+            bottom: var(--joy-pad, 35px);
+            left: var(--joy-pad, 35px);
+            width: var(--joy-size, 140px);
+            height: var(--joy-size, 140px);
+            pointer-events: auto;
+        }
+
+        .joystick-base {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(108, 92, 231, 0.3) 0%, rgba(30, 30, 60, 0.6) 100%);
+            border: 3px solid rgba(162, 155, 254, 0.5);
+            border-radius: 50%;
+            box-shadow: inset 0 0 30px rgba(108, 92, 231, 0.3), 0 0 40px rgba(108, 92, 231, 0.2);
+        }
+
+        .joystick-base::before {
+            content: '';
+            position: absolute;
+            inset: 15%;
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+        }
+
+        .joystick-thumb {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, rgba(162, 155, 254, 0.9), rgba(108, 92, 231, 0.8));
+            border: 3px solid rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4), 0 0 30px rgba(108, 92, 231, 0.5);
+            transition: transform 0.08s ease-out;
+        }
+
+        .joystick-thumb::before {
+            content: '';
+            position: absolute;
+            top: 20%;
+            left: 20%;
+            width: 30%;
+            height: 30%;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+        }
+
+        /* 动作按钮区 */
+        .action-buttons {
+            position: absolute;
+            bottom: 35px;
+            right: 35px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            pointer-events: auto;
+        }
+
+        .action-row {
+            display: flex;
+            gap: 18px;
+        }
+
+        .action-btn {
+            width: var(--btn-size, 70px);
+            height: var(--btn-size, 70px);
+            background: linear-gradient(135deg, rgba(80, 80, 120, 0.8), rgba(40, 40, 70, 0.9));
+            border: 3px solid rgba(150, 150, 200, 0.5);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: calc(var(--btn-size, 70px) * 0.43);
+            color: #fff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4), inset 0 -2px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 10%;
+            left: 10%;
+            width: 30%;
+            height: 30%;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+        }
+
+        .action-btn.active {
+            transform: scale(0.9);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4), 0 0 30px var(--gold), inset 0 2px 10px rgba(255, 255, 255, 0.2);
+            border-color: var(--gold);
+        }
+
+        .action-btn.jump {
+            background: linear-gradient(135deg, rgba(46, 213, 115, 0.8), rgba(39, 174, 96, 0.9));
+            border-color: rgba(46, 213, 115, 0.6);
+        }
+
+        .action-btn.mine {
+            background: linear-gradient(135deg, rgba(241, 196, 15, 0.8), rgba(243, 156, 18, 0.9));
+            border-color: rgba(241, 196, 15, 0.6);
+        }
+
+        .action-btn.place {
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.8), rgba(41, 128, 185, 0.9));
+            border-color: rgba(52, 152, 219, 0.6);
+        }
+
+        /* 跳跃按钮 - 左边 */
+        .jump-container {
+            position: absolute;
+            bottom: 190px;
+            left: 70px;
+            pointer-events: auto;
+        }
+
+        /* 目标十字准心 */
+        #crosshair {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            pointer-events: none;
+            z-index: 160;
+            display: none;
+        }
+
+        #crosshair::before,
+        #crosshair::after {
+            content: '';
+            position: absolute;
+            background: var(--gold);
+            box-shadow: 0 0 10px var(--gold), 0 0 20px rgba(255, 234, 167, 0.5);
+            border-radius: 2px;
+        }
+
+        #crosshair::before {
+            width: 3px;
+            height: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        #crosshair::after {
+            width: 100%;
+            height: 3px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* ═══════════════════ 桌面端信息提示 ═══════════════════ */
+        #info {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 12px 18px;
+            border-radius: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 12px;
+            line-height: 1.6;
+            box-shadow: var(--shadow);
+        }
+
+        #info .highlight {
+            color: var(--gold);
+            font-weight: 600;
+            padding: 2px 6px;
+            background: rgba(255, 234, 167, 0.15);
+            border-radius: 4px;
+        }
+
+        /* ═══════════════════ 全屏按钮 ═══════════════════ */
+        #fullscreen-btn {
+            position: absolute;
+            top: 15px;
+            right: 185px;
+            width: 42px;
+            height: 42px;
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            background: var(--glass);
+            border: 2px solid rgba(108, 92, 231, 0.4);
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            cursor: pointer;
+            pointer-events: auto;
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: var(--shadow);
+        }
+
+        #fullscreen-btn:hover {
+            transform: scale(1.1);
+            border-color: var(--secondary);
+            box-shadow: var(--shadow), var(--glow);
+        }
+
+        /* ═══════════════════ FPS显示 ═══════════════════ */
+        #fps {
+            position: absolute;
+            top: 15px;
+            right: 235px;
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 8px 14px;
+            border-radius: 10px;
+            color: #2ecc71;
+            font-size: 12px;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+            box-shadow: var(--shadow);
+        }
+
+        /* ═══════════════════ 时间显示 ═══════════════════ */
+        #time-display {
+            position: absolute;
+            top: 70px;
+            right: 15px;
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 8px 14px;
+            border-radius: 10px;
+            color: var(--gold);
+            font-size: 12px;
+            font-weight: 600;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* ═══════════════════ 响应式布局 ═══════════════════ */
+        @media (pointer: coarse) {
+            #mobile-controls {
+                display: block;
+            }
+
+            #info {
+                display: none;
+            }
+
+            #crosshair {
+                display: block;
+            }
+
+            .slot {
+                width: 42px;
+                height: 42px;
+            }
+
+            .slot canvas {
+                width: 26px;
+                height: 26px;
+            }
+
+            .slot .key {
+                display: none;
+            }
+
+            .slot .item-icon {
+                font-size: 22px;
+            }
+
+            #hotbar {
+                padding: 8px 10px;
+                gap: 4px;
+                border-radius: 16px;
+            }
+
+            #stats {
+                transform: scale(0.9);
+            }
+
+            #minimap {
+                width: 120px;
+                height: 75px;
+                border-radius: 12px;
+                right: 20px;
+                bottom: 130px;
+                top: auto;
+            }
+
+            #fullscreen-btn {
+                right: 145px;
+                width: 38px;
+                height: 38px;
+            }
+
+            #fps {
+                right: 195px;
+                padding: 6px 10px;
+                font-size: 10px;
+            }
+
+            #time-display {
+                top: 100px;
+                right: 15px;
+                font-size: 10px;
+                padding: 6px 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .slot {
+                width: 36px;
+                height: 36px;
+                border-radius: 10px;
+            }
+
+            .slot canvas {
+                width: 22px;
+                height: 22px;
+            }
+
+            .slot .count {
+                font-size: 9px;
+            }
+
+            .slot .item-icon {
+                font-size: 18px;
+            }
+
+            #hotbar {
+                padding: 6px 8px;
+                gap: 3px;
+                border-radius: var(--hud-radius);
+            }
+
+            .joystick-container {
+                position: absolute;
+                bottom: var(--joy-pad, 35px);
+                left: var(--joy-pad, 35px);
+                width: var(--joy-size, 140px);
+                height: var(--joy-size, 140px);
+                pointer-events: auto;
+            }
+
+            .joystick-thumb {
+                width: 50px;
+                height: 50px;
+            }
+
+            .action-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 26px;
+            }
+
+            .action-buttons {
+                bottom: 25px;
+                right: 25px;
+                gap: 12px;
+            }
+
+            .action-row {
+                gap: 12px;
+            }
+
+            .jump-container {
+                bottom: 160px;
+                left: 55px;
+            }
+
+            #minimap {
+                width: 90px;
+                height: 55px;
+            }
+
+            #stats {
+                transform: scale(0.8);
+            }
+        }
+
+        /* JS 强制移动端模式（当某些浏览器媒体查询/UA 判断异常时作为兜底） */
+        html.is-mobile #mobile-controls {
+            display: block;
+        }
+
+        html.is-mobile #info {
+            display: none;
+        }
+
+        html.is-mobile #crosshair {
+            display: block;
+        }
+
+        html.is-mobile .slot {
+            width: 42px;
+            height: 42px;
+        }
+
+        html.is-mobile .slot canvas {
+            width: 26px;
+            height: 26px;
+        }
+
+        html.is-mobile .slot .key {
+            display: none;
+        }
+
+        html.is-mobile .slot .item-icon {
+            font-size: 22px;
+        }
+
+        html.is-mobile #hotbar {
+            padding: 8px 10px;
+            gap: 4px;
+            border-radius: 16px;
+        }
+
+        html.is-mobile #stats {
+            transform: scale(0.9);
+        }
+
+        html.is-mobile #minimap {
+            width: 120px;
+            height: 75px;
+            border-radius: 12px;
+            right: 20px;
+            bottom: 130px;
+            top: auto;
+        }
+
+        html.is-mobile #fullscreen-btn {
+            right: 145px;
+            width: 38px;
+            height: 38px;
+        }
+
+        html.is-mobile #fps {
+            right: 195px;
+            padding: 6px 10px;
+            font-size: 10px;
+        }
+
+        html.is-mobile #time-display {
+            top: 100px;
+            right: 15px;
+            font-size: 10px;
+            padding: 6px 10px;
+        }
+
+        /* 移动端合成按钮/面板（在“横屏 + 大屏手机”时，避免仍然走桌面布局） */
+        html.is-mobile #btn-craft-toggle {
+            display: flex;
+            top: 80px;
+            left: 15px;
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: rgba(30, 30, 60, 0.8);
+            backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            pointer-events: auto;
+            color: #fff;
+            z-index: 90;
+        }
+
+        html.is-mobile #crafting-panel {
+            flex-direction: column;
+            height: 90%;
+        }
+
+        html.is-mobile .craft-list-container {
+            border-right: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        html.is-mobile .craft-details {
+            padding: 20px;
+        }
+
+        html.is-mobile .preview-box {
+            width: 60px;
+            height: 60px;
+        }
+
+        /* iPad/大屏设备：竖屏时也提示横屏 */
+        @media (orientation: portrait) {
+            html.is-mobile #rotate-hint {
+                display: flex !important;
+            }
+        }
+
+        /* 横屏锁定提示 */
+        @media (orientation: portrait) and (max-width: 768px) {
+            #rotate-hint {
+                display: flex !important;
+            }
+        }
+
+        #rotate-hint {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0c0c1e, #1a1a2e);
+            z-index: 2000;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+        }
+
+        #rotate-hint .icon {
+            font-size: 80px;
+            animation: rotatePhone 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px var(--secondary));
+        }
+
+        #rotate-hint p {
+            margin-top: 30px;
+            font-size: 18px;
+            color: var(--secondary);
+            letter-spacing: 1px;
+        }
+
+        @keyframes rotatePhone {
+
+            0%,
+            100% {
+                transform: rotate(0deg);
+            }
+
+            50% {
+                transform: rotate(90deg);
+            }
+        }
+
+        /* ═══════════════════ 合成界面 - 终极美学 ═══════════════════ */
+        #crafting-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(12, 12, 30, 0.6);
+            backdrop-filter: none;
+            z-index: 500;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: auto;
+            contain: layout paint;
+            will-change: opacity, transform;
+        }
+
+        #crafting-overlay.open {
+            display: flex;
+            opacity: 1;
+        }
+
+        #crafting-panel {
+            width: min(700px, 90%);
+            height: min(500px, 85%);
+            background: linear-gradient(135deg, rgba(30, 30, 60, 0.9), rgba(20, 20, 40, 0.95));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            display: flex;
+            overflow: hidden;
+            transform: scale(0.95);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        #crafting-overlay.open #crafting-panel {
+            transform: scale(1);
+        }
+
+        /* 左侧列表区 */
+        .craft-list-container {
+            flex: 1.2;
+            padding: 20px;
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .craft-header {
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .craft-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+            gap: 10px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .craft-grid::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .craft-grid::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+        }
+
+        .craft-slot {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .craft-slot:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .craft-slot.selected {
+            background: linear-gradient(135deg, rgba(108, 92, 231, 0.2), rgba(108, 92, 231, 0.1));
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(108, 92, 231, 0.3);
+        }
+
+        .craft-slot.can-craft::after {
+            content: '';
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 6px;
+            height: 6px;
+            background: #00b894;
+            border-radius: 50%;
+            box-shadow: 0 0 5px #00b894;
+        }
+
+        .craft-slot canvas {
+            width: 32px;
+            height: 32px;
+            image-rendering: pixelated;
+        }
+
+        /* 右侧详情区 */
+        .craft-details {
+            flex: 1;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            background: radial-gradient(circle at top right, rgba(108, 92, 231, 0.1), transparent 60%);
+        }
+
+        .preview-box {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .preview-box canvas {
+            width: 48px;
+            height: 48px;
+            image-rendering: pixelated;
+            filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.5));
+        }
+
+        .item-title {
+            font-size: 20px;
+            color: var(--gold);
+            font-weight: 700;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        .item-desc {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 30px;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .ingredients-list {
+            width: 100%;
+            margin-bottom: auto;
+        }
+
+        .ingredient {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border: 1px solid transparent;
+        }
+
+        .ingredient.missing {
+            border-color: rgba(255, 107, 107, 0.3);
+            background: rgba(255, 107, 107, 0.05);
+        }
+
+        .ing-name {
+            font-size: 12px;
+            color: #fff;
+        }
+
+        .ing-count {
+            font-size: 12px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .ing-count.ok {
+            color: #55efc4;
+        }
+
+        .ing-count.bad {
+            color: #ff7675;
+        }
+
+        .craft-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(90deg, #6c5ce7, #a29bfe);
+            color: white;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .craft-btn:disabled {
+            background: #2d3436;
+            color: #636e72;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .craft-btn:not(:disabled):hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(108, 92, 231, 0.5);
+        }
+
+        .craft-btn:not(:disabled):active {
+            transform: translateY(0);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            color: #fff;
+            transition: all 0.2s;
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
+        }
+
+        /* 移动端合成按钮 */
+        #btn-craft-toggle {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            /* 左上角，stats下面一点? 或者stats右边 */
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            #btn-craft-toggle {
+                display: flex;
+                top: 80px;
+                left: 15px;
+                /* Stats下面 */
+                width: 42px;
+                height: 42px;
+                border-radius: 12px;
+                background: rgba(30, 30, 60, 0.8);
+                backdrop-filter: blur(var(--glass-blur));
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                justify-content: center;
+                align-items: center;
+                font-size: 20px;
+                pointer-events: auto;
+                color: #fff;
+                z-index: 90;
+            }
+
+            #crafting-panel {
+                flex-direction: column;
+                height: 90%;
+            }
+
+            .craft-list-container {
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .craft-details {
+                padding: 20px;
+            }
+
+            .preview-box {
+                width: 60px;
+                height: 60px;
+            }
+        }
+
+        /* ═══════════════════ 环境粒子 ═══════════════════ */
+        #ambient-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+            overflow: hidden;
+        }
+
+        .firefly {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--gold);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--gold), 0 0 20px var(--gold);
+            animation: fireflyFloat 8s ease-in-out infinite;
+            opacity: 0;
+        }
+
+        @keyframes fireflyFloat {
+
+            0%,
+            100% {
+                opacity: 0;
+                transform: translateY(0) translateX(0);
+            }
+
+            10% {
+                opacity: 0.8;
+            }
+
+            50% {
+                opacity: 0.4;
+                transform: translateY(-100px) translateX(50px);
+            }
+
+            90% {
+                opacity: 0.8;
+            }
+        }
+
+        
+        .raindrop {
+            position: absolute;
+            width: 2px;
+            height: 14px;
+            border-radius: 2px;
+            background: linear-gradient(to bottom, rgba(180, 220, 255, 0), rgba(180, 220, 255, 0.9));
+            opacity: 0.6;
+            transform: translate3d(0, -20vh, 0) rotate(12deg);
+            animation: rainFall 0.9s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes rainFall {
+            from {
+                transform: translate3d(0, -20vh, 0) rotate(12deg);
+            }
+
+            to {
+                transform: translate3d(0, 120vh, 0) rotate(12deg);
+            }
+        }
+
+        .snowflake {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 6px rgba(255, 255, 255, 0.55);
+            opacity: 0.85;
+            transform: translate3d(0, -10vh, 0);
+            animation: snowFall 7s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes snowFall {
+            from {
+                transform: translate3d(0, -10vh, 0);
+            }
+
+            to {
+                transform: translate3d(var(--drift, 0px), 120vh, 0);
+            }
+        }
+
+        
+        
+
+        body.weather-on #game {
+            filter: hue-rotate(var(--weather-hue)) saturate(var(--weather-sat)) brightness(var(--weather-bright)) contrast(var(--weather-contrast));
+        }
+
+        body:not(.weather-on) #game {
+            filter: none;
+        }
+
+        
+
+        .ux-val {
+            display: inline-block;
+            margin-left: 6px;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.92);
+            background: rgba(255, 255, 255, 0.10);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            vertical-align: middle;
+        }
+
+        /* 选中物品提示（顶部热键栏下方） */
+        .item-hint {
+            position: absolute;
+            top: 72px;
+            left: 50%;
+            transform: translateX(-50%);
+            pointer-events: none;
+            padding: 6px 10px;
+            border-radius: 14px;
+            background: rgba(0, 0, 0, 0.38);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            color: rgba(255, 255, 255, 0.92);
+            font-size: 12px;
+            letter-spacing: 0.2px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.55);
+            opacity: 0;
+            transition: opacity 0.18s ease;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            max-width: min(380px, 86vw);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .item-hint.show {
+            opacity: 1;
+        }
+
+        html.is-mobile .item-hint {
+            top: 76px;
+            font-size: 11px;
+        }
+
+        /* 帮助面板：按设备显示 */
+        #help-overlay .help-mobile {
+            display: none;
+        }
+
+        html.is-mobile #help-overlay .help-mobile {
+            display: grid;
+        }
+
+        html.is-mobile #help-overlay .help-desktop {
+            display: none;
+        }
+
+        /* ---------------------------------------------------------
+   Frosted Glass UI v2 (统一磨砂毛玻璃风格：暂停/设置/背包/合成/按钮)
+   目标：让所有面板看起来更接近“挖掘进度条”的半透明磨砂质感
+----------------------------------------------------------*/
+        
+
+        body.tu-modal-open {
+            overflow: hidden;
+            overscroll-behavior: none;
+            touch-action: none;
+        }
+
+        /* 统一遮罩：更柔和的暗化 + 更明显的毛玻璃 */
+        .ux-overlay {
+            background: rgba(0, 0, 0, 0.48) !important;
+            backdrop-filter: blur(10px) saturate(1.25) !important;
+            -webkit-backdrop-filter: blur(10px) saturate(1.25) !important;
+        }
+
+        /* 统一面板：更贴近挖掘进度条的磨砂半透明 */
+        .ux-panel,
+        #inventory-panel,
+        #crafting-panel {
+            background: var(--tu-glass-bg) !important;
+            border: 1px solid var(--tu-glass-border) !important;
+            border-radius: var(--tu-glass-radius) !important;
+            box-shadow: var(--tu-glass-shadow), 0 0 0 1px rgba(255, 255, 255, 0.06) inset !important;
+            backdrop-filter: blur(var(--tu-glass-blur)) saturate(1.25) !important;
+            -webkit-backdrop-filter: blur(var(--tu-glass-blur)) saturate(1.25) !important;
+            position: relative;
+        }
+
+        /* 内层“高光”描边（更像磨砂玻璃折射） */
+        .ux-panel::before,
+        #inventory-panel::before,
+        #crafting-panel::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            pointer-events: none;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.03));
+            opacity: 0.85;
+            mix-blend-mode: screen;
+        }
+
+        /* 标题栏更“HUD化” */
+        .ux-title {
+            padding-bottom: 10px !important;
+            margin-bottom: 12px !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.10) !important;
+        }
+
+        .ux-title h2 {
+            color: var(--tu-text) !important;
+            letter-spacing: 0.3px;
+        }
+
+        /* 统一按钮（包含暂停/设置/帮助面板按钮、背包/合成按钮） */
+        .ux-action,
+        .inv-btn,
+        .craft-btn,
+        #craft-action-btn {
+            background: rgba(255, 255, 255, 0.08) !important;
+            border: 1px solid rgba(255, 255, 255, 0.18) !important;
+            color: var(--tu-text) !important;
+            backdrop-filter: blur(12px) saturate(1.15) !important;
+            -webkit-backdrop-filter: blur(12px) saturate(1.15) !important;
+            box-shadow: 0 12px 26px rgba(0, 0, 0, 0.35) !important;
+            transition: transform 0.12s ease, background 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease !important;
+        }
+
+        .ux-action:hover,
+        .inv-btn:hover,
+        .craft-btn:hover,
+        #craft-action-btn:hover {
+            transform: translateY(-1px);
+            border-color: rgba(255, 255, 255, 0.26) !important;
+            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.42) !important;
+        }
+
+        .ux-action:active,
+        .inv-btn:active,
+        .craft-btn:active,
+        #craft-action-btn:active {
+            transform: translateY(0px);
+        }
+
+        /* Primary 按钮：柔和渐变强调（更贴近挖掘条的高亮） */
+        .ux-action.primary,
+        .inv-btn.primary,
+        #craft-action-btn.primary {
+            background: linear-gradient(135deg, rgba(108, 92, 231, 0.58), rgba(253, 121, 168, 0.22)) !important;
+            border-color: rgba(162, 155, 254, 0.56) !important;
+        }
+
+        /* Close/小按钮：更像HUD上的磨砂小片 */
+        .ux-close,
+        .inv-close-btn,
+        .close-btn {
+            background: rgba(255, 255, 255, 0.08) !important;
+            border: 1px solid rgba(255, 255, 255, 0.16) !important;
+            color: var(--tu-text) !important;
+            backdrop-filter: blur(12px) saturate(1.2) !important;
+            -webkit-backdrop-filter: blur(12px) saturate(1.2) !important;
+            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.38) !important;
+        }
+
+        .ux-close:hover,
+        .inv-close-btn:hover,
+        .close-btn:hover {
+            border-color: rgba(255, 255, 255, 0.26) !important;
+        }
+
+        /* 表单控件：统一磨砂 */
+        .ux-panel select,
+        .ux-panel input[type="text"],
+        .ux-panel input[type="number"] {
+            background: rgba(255, 255, 255, 0.06) !important;
+            border: 1px solid rgba(255, 255, 255, 0.16) !important;
+            color: var(--tu-text) !important;
+            border-radius: 12px !important;
+            backdrop-filter: blur(12px) !important;
+            -webkit-backdrop-filter: blur(12px) !important;
+        }
+
+        .ux-panel small {
+            color: var(--tu-muted) !important;
+        }
+
+        /* Range：让轨道/滑块更精致 */
+        .ux-panel input[type="range"] {
+            accent-color: rgba(162, 155, 254, 0.95);
+        }
+
+        .ux-panel input[type="range"]::-webkit-slider-runnable-track {
+            height: 8px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.10);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .ux-panel input[type="range"]::-webkit-slider-thumb {
+            width: 18px;
+            height: 18px;
+            margin-top: -6px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid rgba(0, 0, 0, 0.18);
+        }
+
+        /* 背包格子：微调更接近“玻璃小块” */
+        .inv-slot {
+            background: rgba(255, 255, 255, 0.06) !important;
+            border: 1px solid rgba(255, 255, 255, 0.14) !important;
+            backdrop-filter: blur(10px) !important;
+            -webkit-backdrop-filter: blur(10px) !important;
+        }
+
+        .inv-slot:hover {
+            border-color: rgba(255, 255, 255, 0.22) !important;
+        }
+
+        /* 合成列表格子同理 */
+        .craft-grid .craft-item,
+        .craft-grid button {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+        }
+
+        /* Toast 更像 HUD */
+        .toast {
+            background: rgba(15, 18, 40, 0.66) !important;
+            border: 1px solid rgba(255, 255, 255, 0.18) !important;
+            backdrop-filter: blur(14px) saturate(1.2) !important;
+            -webkit-backdrop-filter: blur(14px) saturate(1.2) !important;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55) !important;
+        }
+
+        
+        html.no-backdrop .top-btn,
+        html.no-backdrop .toast,
+        html.no-backdrop .ux-panel,
+        html.no-backdrop #inventory-panel,
+        html.no-backdrop #crafting-panel,
+        html.no-backdrop #hotbar,
+        html.no-backdrop #minimap,
+        html.no-backdrop #info,
+        html.no-backdrop #mining-bar,
+        html.no-backdrop .stat-bar,
+        html.no-backdrop #inv-held {
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            background: rgba(15, 18, 40, 0.92) !important;
+            border-color: rgba(255, 255, 255, 0.18) !important;
+        }
+
+        html.no-backdrop .ux-overlay,
+        html.no-backdrop #inventory-overlay,
+        html.no-backdrop #crafting-overlay {
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+
+        /* ---------------------------------------------------------
+   Performance UI downgrade (AutoQuality / Low Power)
+   - html.tu-low-power: QualityManager 进入后台或自动降档时启用
+   - html.tu-quality-low: 体验层降档（fps 低）时启用
+   目标：在不影响玩法的前提下，显著减少 GPU/合成开销（backdrop-filter / 大阴影 / 纯装饰动画）
+----------------------------------------------------------*/
+
+        html.tu-low-power {
+            /* 后台/低功耗：尽量“省电优先” */
+            --hud-blur: 0px;
+            --glass-blur: 0px;
+            --tu-glass-blur: 0px;
+            --glow: 0 0 0 rgba(0, 0, 0, 0);
+            --glow-shadow: none;
+            --hud-shadow: 0 10px 24px rgba(0, 0, 0, 0.42), 0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+        }
+
+        html.tu-quality-low {
+            /* 低帧：在保留少量质感的同时降低成本 */
+            --hud-blur: 6px;
+            --glass-blur: 6px;
+            --tu-glass-blur: 8px;
+            --hud-shadow: 0 10px 28px rgba(0, 0, 0, 0.46), 0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+        }
+
+        /* 关闭最吃性能的 backdrop-filter（仅 UI 面板层） */
+        html.tu-low-power .top-btn,
+        html.tu-low-power .toast,
+        html.tu-low-power .ux-panel,
+        html.tu-low-power #inventory-panel,
+        html.tu-low-power #crafting-panel,
+        html.tu-low-power #hotbar,
+        html.tu-low-power #minimap,
+        html.tu-low-power #info,
+        html.tu-low-power #mining-bar,
+        html.tu-low-power .stat-bar,
+        html.tu-low-power #inv-held,
+        html.tu-quality-low .top-btn,
+        html.tu-quality-low .toast,
+        html.tu-quality-low .ux-panel,
+        html.tu-quality-low #inventory-panel,
+        html.tu-quality-low #crafting-panel,
+        html.tu-quality-low #hotbar,
+        html.tu-quality-low #minimap,
+        html.tu-quality-low #info,
+        html.tu-quality-low #mining-bar,
+        html.tu-quality-low .stat-bar,
+        html.tu-quality-low #inv-held {
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+
+        /* 纯装饰动画：在低功耗/低档下关闭 */
+        html.tu-low-power #health-fill::after,
+        html.tu-low-power #mana-fill::after,
+        html.tu-low-power .slot.active::before,
+        html.tu-low-power #mining-bar .fill,
+        html.tu-low-power #mining-bar .fill::after,
+        html.tu-quality-low #health-fill::after,
+        html.tu-quality-low #mana-fill::after,
+        html.tu-quality-low .slot.active::before,
+        html.tu-quality-low #mining-bar .fill,
+        html.tu-quality-low #mining-bar .fill::after {
+            animation: none !important;
+        }
+
+        /* 环境 DOM 粒子：低功耗/低档直接关闭（Canvas 已有粒子系统） */
+        html.tu-low-power #ambient-particles,
+        html.tu-quality-low #ambient-particles {
+            display: none !important;
+        }
+
+        /* 图标 drop-shadow：可省一点合成开销 */
+        html.tu-low-power .stat-bar .icon,
+        html.tu-quality-low .stat-bar .icon {
+            filter: none !important;
+        }
+
+        /* ═══════════════════ Consolidated CSS Performance Optimizations ═══════════════════ */
+        
+        /* Containment: reduce layout/paint scope for interactive elements */
+        .action-btn,
+        .top-btn {
+            contain: layout style;
+        }
+        .inv-slot,
+        .craft-item,
+        .toast {
+            contain: layout style paint;
+        }
+        #stats,
+        #hotbar,
+        .action-buttons {
+            contain: layout;
+        }
+
+        /* GPU compositing hints (only for elements that actually animate frequently) */
+        #joystick-thumb,
+        #crosshair {
+            transform: translateZ(0);
+            backface-visibility: hidden;
+        }
+
+        /* Respect user preference for reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Text rendering optimization */
+        body {
+            text-rendering: optimizeSpeed;
+        }
+
+        .low-perf #ambient-particles, .low-perf .vfx-layer { display: none !important; }
+        #tu-perf-stats { font-family: monospace; }

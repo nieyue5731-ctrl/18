@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="description" content="Terraria Ultra - Aesthetic Edition - A beautiful 2D sandbox game">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#1a1a2e">
+  <title>Terraria Ultra - Aesthetic Edition</title>
+
+  <!-- CSS (Phase 2: Consolidated from 5 inline style blocks) -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <canvas id="game"></canvas>
+    <!-- 环境粒子 -->
+    <div id="ambient-particles"></div>
+    <!-- 加载界面 -->
+    <div id="loading">
+        <div class="loading-particles"></div>
+        <div class="loading-content">
+            <h1>✨ TERRARIA ULTRA ✨</h1>
+            <p class="subtitle">Aesthetic Edition</p>
+            <div class="progress">
+                <div class="progress-fill" id="load-progress"></div>
+            </div>
+            <div class="status" id="load-status">初始化魔法引擎...</div>
+        </div>
+    </div>
+    <!-- 横屏提示 -->
+    <div id="rotate-hint">
+        <div class="icon">📱</div>
+        <p>请横屏游玩以获得最佳体验</p>
+    </div>
+    <!-- 合成界面 -->
+    <div id="crafting-overlay">
+        <div id="crafting-panel">
+            <div class="close-btn" id="craft-close">✕</div>
+            <div class="craft-list-container">
+                <div class="craft-header">
+                    <span>🔨 制造</span>
+                </div>
+                <div class="craft-grid" id="craft-grid">
+                    <!-- 动态生成 -->
+                </div>
+            </div>
+            <div class="craft-details">
+                <div class="preview-box" id="craft-preview"></div>
+                <div class="item-title" id="craft-title">选择物品</div>
+                <div class="item-desc" id="craft-desc">点击左侧列表查看配方</div>
+                <div class="ingredients-list" id="craft-ingredients">
+                    <!-- 动态生成 -->
+                </div>
+                <button class="craft-btn" disabled="" id="craft-action-btn">制造</button>
+            </div>
+        </div>
+    </div>
+    <!-- 背包界面 -->
+    <div aria-hidden="true" id="inventory-overlay">
+        <div aria-label="背包" id="inventory-panel" role="dialog">
+            <div class="inv-close-btn" id="inv-close" title="关闭 (Esc)">✕</div>
+            <div class="inv-left">
+                <div class="inv-topbar">
+                    <div class="inv-title">🎒 背包</div>
+                    <div class="inv-capacity">
+                        <span class="inv-capacity-text" id="inv-capacity-text">0/36</span>
+                        <div class="inv-capacity-bar">
+                            <div class="fill" id="inv-capacity-fill"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="inv-section">
+                    <div class="inv-section-label">快捷栏 <span style="opacity:.6">(1-9)</span></div>
+                    <div class="inv-grid" id="inv-hotbar-grid"></div>
+                </div>
+                <div class="inv-section">
+                    <div class="inv-section-label">背包</div>
+                    <div class="inv-grid" id="inv-backpack-grid"></div>
+                </div>
+            </div>
+            <div class="inv-right">
+                <div class="inv-preview-box" id="inv-preview"></div>
+                <div class="inv-item-name" id="inv-item-name">未选择</div>
+                <div class="inv-item-meta" id="inv-item-meta"></div>
+                <div class="inv-item-desc" id="inv-item-desc">点击格子查看，或拖拽/点击交换。</div>
+                <div class="inv-action-row">
+                    <button class="inv-btn primary" id="inv-sort">🧹 整理</button>
+                    <button class="inv-btn" id="inv-to-hotbar">↔ 放入快捷栏</button>
+                    <button class="inv-btn" id="inv-put-back">↩ 放回</button>
+                    <button class="inv-btn danger" id="inv-drop">🗑 丢弃</button>
+                </div>
+                <div class="inv-hints">
+                    <div><kbd>左键</kbd> 拿起/放下　<kbd>右键</kbd> 拆分/放 1 个</div>
+                    <div><kbd>Shift</kbd>+<kbd>点击</kbd> 快速移动　<kbd>B</kbd>/<kbd>I</kbd> 打开背包　<kbd>Esc</kbd> 关闭</div>
+                </div>
+            </div>
+        </div>
+        <!-- 光标物品 -->
+        <div aria-hidden="true" id="inv-held"></div>
+    </div>
+    <!-- UX+：暂停 / 设置 / 存档 -->
+    <div aria-hidden="true" class="ux-overlay" id="pause-overlay">
+        <div class="ux-panel">
+            <div class="ux-title">
+                <h2>⏸ 已暂停</h2>
+                <button aria-label="关闭" class="ux-close" id="pause-close">✕</button>
+            </div>
+            <div class="ux-grid">
+                <div class="ux-row">
+                    <label>
+                        <b>提示</b>
+                        <small>暂停时游戏不会更新；你仍可查看界面并调整设置。</small>
+                    </label>
+                    <span> </span>
+                </div>
+            </div>
+            <div class="ux-actions">
+                <button class="ux-action" id="pause-newworld">🧹 新世界</button>
+                <button class="ux-action" id="pause-save">💾 保存</button>
+                <button class="ux-action" id="pause-fullscreen">🖥 全屏</button>
+                <button class="ux-action primary" id="pause-resume">▶ 继续</button>
+            </div>
+        </div>
+    </div>
+    <div aria-hidden="true" class="ux-overlay" id="settings-overlay">
+        <div class="ux-panel">
+            <div class="ux-title">
+                <h2>⚙️ 设置</h2>
+                <button aria-label="关闭" class="ux-close" id="settings-close">✕</button>
+            </div>
+            <div class="ux-grid">
+                <div class="ux-row">
+                    <label>
+                        画质 / 分辨率倍率
+                        <small>降低可显著提升低端设备帧率（建议：移动端选“省电”）。</small>
+                    </label>
+                    <select id="opt-dpr">
+                        <option value="1">省电 (1x)</option>
+                        <option value="1.5">均衡 (1.5x)</option>
+                        <option value="2">高清 (2x)</option>
+                    </select>
+                </div>
+                <div class="ux-row">
+                    <label>
+                        粒子效果
+                        <small>关闭可减少卡顿与发热。</small>
+                    </label>
+                    <select id="opt-particles">
+                        <option value="1">开启</option>
+                        <option value="0">关闭</option>
+                    </select>
+                </div>
+                <div class="ux-row">
+                    <label>
+                        环境特效（萤火虫/背景粒子）
+                        <small>关闭可减少 DOM 动画压力。</small>
+                    </label>
+                    <select id="opt-ambient">
+                        <option value="1">开启</option>
+                        <option value="0">关闭</option>
+                    </select>
+                </div>
+
+                <div class="ux-row">
+                    <label>
+                        背景墙山脉（远景）
+                        <span class="ux-tip">关闭可减少背景渲染与过度绘制，低端机更流畅</span>
+                    </label>
+                    <select id="opt-bgmountains">
+                        <option value="1">开启</option>
+                        <option value="0">关闭</option>
+                    </select>
+                </div>
+                <div class="ux-row">
+                    <label>
+                        后期画面增强（Bloom/色彩/暗角）
+                        <small>提升“高级感”和氛围；低端设备可选“轻量/关闭”。</small>
+                    </label>
+                    <select id="opt-postfx">
+                        <option value="2">极致</option>
+                        <option value="1">轻量</option>
+                        <option value="0">关闭</option>
+                    </select>
+                </div>
+                <div class="ux-row">
+                    <label>
+                        小地图
+                        <small>不需要时可关闭提升性能。</small>
+                    </label>
+                    <select id="opt-minimap">
+                        <option value="1">开启</option>
+                        <option value="0">关闭</option>
+                    </select>
+                </div>
+                <div class="ux-row">
+                    <label>
+                        触控辅助瞄准
+                        <small>移动端更容易选中方块（按方块中心吸附）。</small>
+                    </label>
+                    <select id="opt-aimassist">
+                        <option value="1">开启</option>
+                        <option value="0">关闭</option>
+                    </select>
+                </div>
+                <div class="ux-row">
+                    <label>
+                        震动反馈
+                        <small>挖掘/放置/切换物品时轻微震动（需设备支持）。</small>
+                    </label>
+                    <select id="opt-vibration">
+                        <option value="1">开启</option>
+                        <option value="0">关闭</option>
+                    </select>
+                </div>
+                <div class="ux-row">
+                    <label>
+                        自动性能调节
+                        <small>帧率降低时自动降低辉光/粒子，优先保证流畅。</small>
+                    </label>
+                    <select id="opt-autoquality">
+                        <option value="1">开启</option>
+                        <option value="0">关闭</option>
+                    </select>
+                </div>
+                <div class="ux-row">
+                    <label>
+                        显示 FPS
+                        <small>调试用，关闭更清爽。</small>
+                    </label>
+                    <select id="opt-showfps">
+                        <option value="0">关闭</option>
+                        <option value="1">开启</option>
+                    </select>
+                </div>
+                <div class="ux-row">
+                    <label>
+                        镜头平滑 <span class="ux-val" id="val-camsmooth"></span>
+                        <small>越大越顺滑但更“慢跟”；越小越跟手但更抖。</small>
+                    </label>
+                    <input id="opt-camsmooth" max="18" min="3" step="1" type="range" />
+                </div>
+                <div class="ux-row">
+                    <label>
+                        镜头前瞻 <span class="ux-val" id="val-lookahead"></span>
+                        <small>奔跑时视野更靠前，挖掘/战斗更舒服。</small>
+                    </label>
+                    <input id="opt-lookahead" max="150" min="0" step="5" type="range" />
+                </div>
+                <div class="ux-row">
+                    <label>
+                        连续放置速度 <span class="ux-val" id="val-placeinterval"></span>
+                        <small>数值越小越快（也更耗性能）。</small>
+                    </label>
+                    <input id="opt-placeinterval" max="160" min="40" step="5" type="range" />
+                </div>
+                <div class="ux-row">
+                    <label>
+                        触控摇杆尺寸 <span class="ux-val" id="val-joy"></span>
+                        <small>适配不同屏幕与手型。</small>
+                    </label>
+                    <input id="opt-joy" max="190" min="110" step="5" type="range" />
+                </div>
+                <div class="ux-row">
+                    <label>
+                        触控按键尺寸 <span class="ux-val" id="val-btn"></span>
+                        <small>挖掘/放置/跳跃按钮大小。</small>
+                    </label>
+                    <input id="opt-btn" max="92" min="58" step="2" type="range" />
+                </div>
+                <div class="ux-row">
+                    <label>
+                        音效音量 <span class="ux-val" id="val-sfx"></span>
+                        <small>无需资源文件，使用轻量 WebAudio。</small>
+                    </label>
+                    <input id="opt-sfx" max="100" min="0" step="1" type="range" />
+                </div>
+                <div class="ux-row">
+                    <label>
+                        减少动态效果
+                        <small>减少动画/过渡，缓解眩晕并提升性能。</small>
+                    </label>
+                    <select id="opt-reduce-motion">
+                        <option value="0">关闭</option>
+                        <option value="1">开启</option>
+                    </select>
+                </div>
+            </div>
+            <div class="ux-actions">
+                <button class="ux-action" id="settings-reset">↩ 恢复默认</button>
+                <button class="ux-action" id="settings-clear-save">🗑 删除存档</button>
+                <button class="ux-action primary" id="settings-apply">✅ 应用</button>
+            </div>
+        </div>
+    </div>
+    <!-- 帮助 / 新手指引 -->
+    <div aria-hidden="true" class="ux-overlay" id="help-overlay">
+        <div class="ux-panel">
+            <div class="ux-title">
+                <h2>❔ 操作与技巧</h2>
+                <button aria-label="关闭" class="ux-close" id="help-close">✕</button>
+            </div>
+            <div class="ux-grid">
+                <div class="ux-row help-desktop">
+                    <label>
+                        <b>键盘鼠标</b>
+                        <small>
+                            <span class="highlight">A/D</span> 移动，<span class="highlight">W/空格</span> 跳跃，<span
+                                class="highlight">Shift</span> 冲刺<br />
+                            <span class="highlight">左键</span> 挖掘，<span class="highlight">右键</span> 放置，<span
+                                class="highlight">1-9</span> 切换物品<br />
+                            <span class="highlight">E</span> 打开工作台 / 合成，<span class="highlight">Esc</span> 暂停
+                        </small>
+                    </label>
+                    <span></span>
+                </div>
+                <div class="ux-row help-mobile">
+                    <label>
+                        <b>触控</b>
+                        <small>
+                            左下 <span class="highlight">摇杆</span> 移动；右下按钮：<span class="highlight">⤴</span> 跳跃 / <span
+                                class="highlight">⚒️</span> 挖掘 / <span class="highlight">🧱</span> 放置<br />
+                            在屏幕上 <span class="highlight">拖动</span> 以移动准星；摇杆推到底自动冲刺<br />
+                            顶部快捷栏可 <span class="highlight">滑动</span> 切换物品
+                        </small>
+                    </label>
+                    <span></span>
+                </div>
+                <div class="ux-row">
+                    <label>
+                        <b>小地图</b>
+                        <small>右下角小地图：点击可展开/折叠。折叠后更省电。</small>
+                    </label>
+                    <span></span>
+                </div>
+                <div class="ux-row">
+                    <label>
+                        <b>存档</b>
+                        <small>顶部 <span class="highlight">💾</span> 手动保存；切后台也会自动保存。</small>
+                    </label>
+                    <span></span>
+                </div>
+                <div class="ux-row">
+                    <label>
+                        <b>推荐设置（移动端）</b>
+                        <small>开启 <span class="highlight">辅助瞄准</span>；卡顿时把 <span class="highlight">画质</span>
+                            调到“省电”。</small>
+                    </label>
+                    <span></span>
+                </div>
+            </div>
+            <div class="ux-actions">
+                <button class="ux-action" id="help-dontshow">✅ 不再提示</button>
+                <button class="ux-action primary" id="help-ok">知道了</button>
+            </div>
+        </div>
+    </div>
+    <!-- 继续游戏/新世界提示（仅当检测到存档时显示） -->
+    <div aria-hidden="true" class="ux-overlay" id="save-prompt-overlay">
+        <div class="ux-panel">
+            <div class="ux-title">
+                <h2>🗂 检测到存档</h2>
+                <button aria-label="关闭" class="ux-close" id="save-prompt-close">✕</button>
+            </div>
+            <div class="ux-grid">
+                <div class="ux-row">
+                    <label>
+                        你想继续上次进度吗？
+                        <small>继续：读取存档；新世界：重新生成并覆盖旧存档。</small>
+                    </label>
+                    <span></span>
+                </div>
+            </div>
+            <div class="ux-actions">
+                <button class="ux-action" id="save-prompt-new">🌱 新世界</button>
+                <button class="ux-action primary" id="save-prompt-continue">▶ 继续</button>
+            </div>
+        </div>
+    </div>
+    <!-- 移动端合成入口 (悬浮球) -->
+    <button id="btn-craft-toggle" aria-label="打开合成 (E)" aria-keyshortcuts="E">⚒️</button>
+    <!-- 移动端背包入口 (悬浮球) -->
+    <button id="btn-bag-toggle" style="position: absolute; top: 60%; right: 10px;" aria-label="打开背包 (B/I)"
+        aria-keyshortcuts="B I">🎒</button>
+    <!-- UI层 -->
+    <div id="ui">
+        <div id="top-buttons">
+            <button class="top-btn" id="btn-pause" title="暂停/继续" aria-label="暂停/继续 (Esc/P)"
+                aria-keyshortcuts="Escape P">⏸</button>
+            <button class="top-btn" id="btn-settings" title="设置" aria-label="设置 (O)" aria-keyshortcuts="O">⚙️</button>
+            <button class="top-btn" id="btn-save" title="手动保存" aria-label="保存 (Ctrl+S)"
+                aria-keyshortcuts="Control+S Meta+S">💾</button>
+            <button class="top-btn" id="btn-inventory" title="背包 (B/I)" aria-label="背包 (B/I)"
+                aria-keyshortcuts="B I">🎒</button>
+            <button class="top-btn" id="btn-help" title="帮助/操作" aria-label="帮助/操作 (H)" aria-keyshortcuts="H">❔</button>
+        </div>
+        <div id="toast-container"></div>
+        <div id="hotbar"></div>
+        <div aria-hidden="true" class="item-hint" id="item-hint"></div>
+        <div id="stats">
+            <div class="stat-bar">
+                <span class="icon">💖</span>
+                <div class="bar">
+                    <div class="fill" id="health-fill" style="width:100%"></div>
+                    <span class="value" id="health-value">100/100</span>
+                </div>
+            </div>
+            <div class="stat-bar">
+                <span class="icon">💫</span>
+                <div class="bar">
+                    <div class="fill" id="mana-fill" style="width:100%"></div>
+                    <span class="value" id="mana-value">50/50</span>
+                </div>
+            </div>
+        </div>
+        <div id="minimap"><canvas id="minimap-canvas"></canvas></div>
+        <div id="fps" style="position: absolute; top: 70px; right: 100px;">60 FPS</div>
+        <button id="fullscreen-btn" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%);"
+            aria-label="全屏 (F)" aria-keyshortcuts="F">⛶</button>
+        <div id="time-display" style="position: absolute; top: 70px; right: 15px;"><span id="time-icon">☀️</span> <span
+                id="time-text">12:00</span></div>
+        <div id="info">
+            <span class="highlight">AD</span> 移动 |
+            <span class="highlight">W和空格</span> 跳跃 |
+            <span class="highlight">左键</span> 挖掘 |
+            <span class="highlight">右键</span> 放置 |
+            <span class="highlight">E</span> 工作台 |
+            <span class="highlight">B</span> 背包 |
+            <span class="highlight">1-9</span> 切换
+        </div>
+        <div aria-hidden="true" id="mining-bar">
+            <div class="mb-top">
+                <canvas class="mb-icon" height="18" id="mining-icon" width="18"></canvas>
+                <div class="mb-name" id="mining-name">挖掘中…</div>
+                <div class="mb-percent" id="mining-percent">0%</div>
+            </div>
+            <div class="mb-track">
+                <div class="fill"></div>
+            </div>
+        </div>
+    </div>
+    <!-- 移动端控制器 -->
+    <div id="mobile-controls">
+        <div class="joystick-container" id="joystick">
+            <div class="joystick-base"></div>
+            <div class="joystick-thumb" id="joystick-thumb"></div>
+        </div>
+        <div class="jump-container">
+            <div class="action-btn jump" id="btn-jump">⬆️</div>
+        </div>
+        <div class="action-buttons">
+            <div class="action-row">
+                <div class="action-btn mine" id="btn-mine">⛏️</div>
+                <div class="action-btn place" id="btn-place">🧱</div>
+            </div>
+        </div>
+    </div>
+    <!-- 十字准心 -->
+    <div id="crosshair"></div>
+
+  <!-- ═══════════════════ JavaScript Modules ═══════════════════ -->
+  <!-- Phase 1-3: Modularized & patches merged -->
+
+  <!-- Core Infrastructure -->
+  <script src="js/core/defensive.js"></script>
+  <script src="js/core/constants.js"></script>
+  <script src="js/core/utils.js"></script>
+  <script src="js/core/event-utils.js"></script>
+
+  <!-- Performance -->
+  <script src="js/performance/perf-tracker.js"></script>
+  <script src="js/performance/object-pool.js"></script>
+  <script src="js/performance/vec-pool.js"></script>
+  <script src="js/performance/array-pool.js"></script>
+  <script src="js/performance/memory-manager.js"></script>
+  <script src="js/performance/texture-cache.js"></script>
+
+  <!-- Systems -->
+  <script src="js/systems/settings.js"></script>
+  <script src="js/ui/toast.js"></script>
+  <script src="js/systems/fullscreen.js"></script>
+  <script src="js/systems/audio.js"></script>
+  <script src="js/systems/save.js"></script>
+  <script src="js/ui/ux-overlays.js"></script>
+
+  <!-- Engine -->
+  <script src="js/engine/noise.js"></script>
+  <script src="js/engine/world-generator.js"></script>
+
+  <!-- Entities -->
+  <script src="js/entities/particle-system.js"></script>
+  <script src="js/entities/dropped-items.js"></script>
+  <script src="js/entities/ambient-particles.js"></script>
+  <script src="js/entities/player.js"></script>
+
+  <!-- Input -->
+  <script src="js/input/touch-controller.js"></script>
+  <script src="js/input/input-manager.js"></script>
+
+  <!-- Rendering (patches merged) -->
+  <script src="js/engine/renderer.js"></script>
+
+  <!-- UI -->
+  <script src="js/systems/crafting-ui.js"></script>
+  <script src="js/systems/quality-manager.js"></script>
+  <script src="js/ui/ui-manager.js"></script>
+  <script src="js/ui/minimap.js"></script>
+  <script src="js/ui/inventory-ui.js"></script>
+
+  <!-- Game Systems -->
+  <script src="js/systems/inventory.js"></script>
+  <script src="js/engine/game.js"></script>
+  <script src="js/systems/tile-logic-engine.js"></script>
+
+  <!-- Boot -->
+  <script src="js/boot/boot.js"></script>
+</body>
+</html>
